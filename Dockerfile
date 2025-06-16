@@ -4,14 +4,17 @@ FROM python:3.11-slim
 # Set working directory
 WORKDIR /app
 
-# Copy code into the container
+# Copy project files
 COPY . .
 
 # Install dependencies
 RUN pip install --no-cache-dir Flask gunicorn
 
-# Expose the port the app runs on
-EXPOSE 5000
+# Use the PORT environment variable from Render
+ENV PORT=10000
 
-# Start the app
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "Server:app"]
+# Expose the port (Render sets this dynamically, this is optional but fine)
+EXPOSE 10000
+
+# Start app using Gunicorn and dynamic port
+CMD ["gunicorn", "--bind", "0.0.0.0:${PORT}", "Server:app"]
