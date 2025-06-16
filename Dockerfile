@@ -4,14 +4,17 @@ FROM python:3.11-slim
 # Set working directory
 WORKDIR /app
 
-# Copy project files into container
+# Copy all files
 COPY . .
 
-# Install required Python packages
+# Install dependencies
 RUN pip install --no-cache-dir Flask gunicorn
 
-# Expose the port (Render dynamically sets this, but good to expose it)
+# Optional: expose port for clarity (Render sets this automatically)
 EXPOSE 10000
 
-# Start app using Gunicorn and shell to expand $PORT
-CMD sh -c "gunicorn --bind 0.0.0.0:$PORT server:app"
+# Set environment variable for Render (default to 10000)
+ENV PORT=10000
+
+# 🛠️ Correct capitalization for 'Server.py'
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT Server:app"]
